@@ -1,16 +1,19 @@
-import * as dotenv from 'dotenv'
-import { cleanEnv, num, str } from 'envalid'
-import { cwd } from 'process'
-import { resolve } from 'path'
-
-dotenv.config({ path: resolve(cwd(), '.env') })
+import {
+  ETH_NETWORK,
+  ETH_RPC,
+  SC_EMAIL_LEDGER_CONTRACT_ADDRESS,
+  SC_ERC721_LEDGER_CONTRACT_ADDRESS,
+} from '@big-whale-labs/constants'
+import { cleanEnv, str } from 'envalid'
 
 // eslint-disable-next-line node/no-process-env
 export default cleanEnv(process.env, {
-  PORT: num({ default: 1337 }),
-  FACEBOOK_APP_ID: str(),
-  FACEBOOK_APP_SECRET: str(),
-  JWT: str(),
-  MONGO: str(),
-  TELEGRAM_LOGIN_TOKEN: str(),
+  VITE_ETH_NETWORK: str({ default: ETH_NETWORK }),
+  VITE_ETH_RPC: str({ default: ETH_RPC }),
+  VITE_SC_ERC721_LEDGER_CONTRACT_ADDRESS: str({
+    default: SC_ERC721_LEDGER_CONTRACT_ADDRESS,
+  }),
+  VITE_SC_EMAIL_LEDGER_CONTRACT_ADDRESS: str({
+    default: SC_EMAIL_LEDGER_CONTRACT_ADDRESS,
+  }),
 })
