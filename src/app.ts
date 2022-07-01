@@ -7,6 +7,7 @@ import {
 } from '@big-whale-labs/seal-cred-ledger-contract'
 import createGuildRole from '@/helpers/createGuildRole'
 import defaultProvider from '@/helpers/defaultProvider'
+import getName from '@/helpers/getName'
 import sCERC721Ledger from '@/helpers/sCERC721Ledger'
 import sCEmailLedger from '@/helpers/sCEmailLedger'
 
@@ -38,7 +39,7 @@ function startListeners() {
       )
       const symbol = await contract.symbol()
       console.log(`Creating role for ${symbol} (${derivativeContract})...`)
-      const name = `goerli-v0.2-${symbol}`
+      const name = getName(symbol)
       await createGuildRole(name, derivativeContract)
       console.log(`Created role for ${symbol} — ${name}`)
     }
@@ -53,7 +54,7 @@ function startListeners() {
       )
       const symbol = await contract.symbol()
       console.log(`Creating role for ${symbol} (${derivativeContract})...`)
-      const name = `goerli-v0.2-${symbol}`
+      const name = getName(symbol)
       await createGuildRole(name, derivativeContract)
       console.log(`Created role for ${symbol} — ${name}`)
     }
