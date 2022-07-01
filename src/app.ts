@@ -1,72 +1,61 @@
 import 'module-alias/register'
 import 'source-map-support/register'
 
-import { Bytes, ethers } from 'ethers'
-import { role } from '@guildxyz/sdk'
+import {
+  SCERC721Derivative__factory,
+  SCEmailDerivative__factory,
+} from '@big-whale-labs/seal-cred-ledger-contract'
+import createGuildRole from '@/helpers/createGuildRole'
 import defaultProvider from '@/helpers/defaultProvider'
-import env from 'helpers/env'
-import getSCERC721Ledger from '@/helpers/getSCERC721Ledger'
-import getSCEmailLedger from '@/helpers/getSCEmailLedger'
+import sCERC721Ledger from '@/helpers/sCERC721Ledger'
+import sCEmailLedger from '@/helpers/sCEmailLedger'
 
-/*
-1. User generates a derivative nft
-2. NFT-d registers into our system
-3. NFT-d is created on guild
-4. User now has a discord role with that
- */
+void (async () => {
+  console.log('Checking ledgers...')
+  await checkLedgers()
+  console.log('Checked ledgers!')
+  console.log('Starting listeners...')
+  startListeners()
+  console.log('App started!')
+})()
+
+// TODO: finish checking ledgers against existing roles
+function checkLedgers() {
+  console.log('Getting SCERC721Ledger events...')
+  // const eventsFilter = sCERC721Ledger.filters.CreateDerivativeContract()
+  // const events = await sCERC721Ledger.queryFilter(eventsFilter)
+  console.log('Got SCERC721Ledger events!')
+}
 
 function startListeners() {
-  const sCERC721Ledger = getSCERC721Ledger(defaultProvider)
-  const sCEmailLedger = getSCEmailLedger(defaultProvider)
-
-  const wallet = new ethers.Wallet(env.VITE_WALLET_PRIVATE_KEY)
-  const sign = (signableMessage: string | Bytes) =>
-    wallet.signMessage(signableMessage)
-
   sCERC721Ledger.on(
     sCERC721Ledger.filters.CreateDerivativeContract(),
-    async (originalContract, derivativeContract) => {
-      await role.create(env.VITE_WALLET_PUBLIC_ADDRESS, sign, {
-        guildId: parseInt(env.VITE_GUILD_ID),
-        name: derivativeContract.tokenName + '-D',
-        logic: 'AND',
-        requirements: [
-          {
-            type: 'ERC721',
-            chain: 'GOERLI',
-            address: derivativeContract.address,
-            data: {
-              amount: 1,
-            },
-          },
-        ],
-      })
+    async (_, derivativeContract) => {
+      console.log(`Creating role for ${derivativeContract}`)
+      const contract = SCERC721Derivative__factory.connect(
+        derivativeContract,
+        defaultProvider
+      )
+      const symbol = await contract.symbol()
+      console.log(`Creating role for ${symbol} (${derivativeContract})...`)
+      const name = `goerli-v0.2-${symbol}`
+      await createGuildRole(name, derivativeContract)
+      console.log(`Created role for ${symbol} — ${name}`)
     }
   )
   sCEmailLedger.on(
     sCEmailLedger.filters.CreateDerivativeContract(),
-    async (email, derivativeContract) => {
-      await role.create(env.VITE_WALLET_PUBLIC_ADDRESS, sign, {
-        guildId: parseInt(env.VITE_GUILD_ID),
-        name: email + '-D',
-        logic: 'AND',
-        requirements: [
-          {
-            type: 'ERC721',
-            chain: 'GOERLI',
-            address: derivativeContract.address,
-            data: {
-              amount: 1,
-            },
-          },
-        ],
-      })
+    async (_, derivativeContract) => {
+      console.log(`Creating role for ${derivativeContract}`)
+      const contract = SCEmailDerivative__factory.connect(
+        derivativeContract,
+        defaultProvider
+      )
+      const symbol = await contract.symbol()
+      console.log(`Creating role for ${symbol} (${derivativeContract})...`)
+      const name = `goerli-v0.2-${symbol}`
+      await createGuildRole(name, derivativeContract)
+      console.log(`Created role for ${symbol} — ${name}`)
     }
   )
 }
-
-void (() => {
-  // TODO: fetch existing ledgers (see the code in `seal-cred-peek-frontend` for reference), and check against existing roles, adding the ones that haven't been added yet
-  startListeners()
-  console.log('App started!')
-})()

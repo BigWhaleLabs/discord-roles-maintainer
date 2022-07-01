@@ -6,7 +6,7 @@ export default function (
   provider: providers.JsonRpcSigner | providers.Provider
 ) {
   return SealCredEmailLedger__factory.connect(
-    env.VITE_SC_EMAIL_LEDGER_CONTRACT_ADDRESS,
+    env.SC_EMAIL_LEDGER_CONTRACT_ADDRESS,
     provider
   )
 }
