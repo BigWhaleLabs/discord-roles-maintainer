@@ -16,4 +16,7 @@ export default cleanEnv(process.env, {
   VITE_SC_EMAIL_LEDGER_CONTRACT_ADDRESS: str({
     default: SC_EMAIL_LEDGER_CONTRACT_ADDRESS,
   }),
+  VITE_GUILD_ID: str(),
+  VITE_WALLET_PUBLIC_ADDRESS: str(),
+  VITE_WALLET_PRIVATE_KEY: str(),
 })
