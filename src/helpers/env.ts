@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv'
 import {
   ETH_NETWORK,
   ETH_RPC,
@@ -5,6 +6,10 @@ import {
   SC_ERC721_LEDGER_CONTRACT_ADDRESS,
 } from '@big-whale-labs/constants'
 import { cleanEnv, num, str } from 'envalid'
+import { cwd } from 'process'
+import { resolve } from 'path'
+
+dotenv.config({ path: resolve(cwd(), '.env') })
 
 // eslint-disable-next-line node/no-process-env
 export default cleanEnv(process.env, {
@@ -18,4 +23,5 @@ export default cleanEnv(process.env, {
   }),
   GUILD_ID: num(),
   WALLET_PRIVATE_KEY: str(),
+  VERIFIED_HOLDER_ROLE_ID: num(),
 })

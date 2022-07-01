@@ -3,8 +3,13 @@ import env from '@/helpers/env'
 import signer from '@/helpers/signer'
 import wallet from '@/helpers/wallet'
 
-export default function (name: string, address: string) {
-  return role.create(wallet.address, signer, {
+export default async function (name: string, address: string) {
+  console.log(`Creating guild role ${name}...`)
+  if (env.isDev) {
+    return
+  }
+  // Create guild role
+  await role.create(wallet.address, signer, {
     guildId: env.GUILD_ID,
     name,
     logic: 'AND',
@@ -19,4 +24,9 @@ export default function (name: string, address: string) {
       },
     ],
   })
+  // Update verified holders
+  // TODO: Update verified holders
+  // await role.update(env.VERIFIED_HOLDER_ROLE_ID, wallet.address, signer, {
+
+  // })
 }

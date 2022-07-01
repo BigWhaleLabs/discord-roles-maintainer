@@ -1,3 +1,3 @@
-export default function (symbol: string) {
-  return `goerli-v0.2-${symbol}`
+export default function (derivativeName: string) {
+  return `${derivativeName} owner (v0.2-goerli)`
 }
