@@ -25,8 +25,19 @@ export default async function (name: string, address: string) {
     ],
   })
   // Update verified holders
-  // TODO: Update verified holders
-  // await role.update(env.VERIFIED_HOLDER_ROLE_ID, wallet.address, signer, {
-
-  // })
+  const verifiedHolderRole = await role.get(env.VERIFIED_HOLDER_ROLE_ID)
+  const requirements = verifiedHolderRole.requirements
+  requirements.push({
+    type: 'ERC721',
+    chain: 'GOERLI',
+    address,
+    data: {
+      amount: 1,
+    },
+  })
+  await role.update(env.VERIFIED_HOLDER_ROLE_ID, wallet.address, signer, {
+    name,
+    logic: 'OR',
+    requirements,
+  })
 }
