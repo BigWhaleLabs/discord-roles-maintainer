@@ -21,11 +21,15 @@ void (async () => {
 })()
 
 // TODO: finish checking ledgers against existing roles
-function checkLedgers() {
+async function checkLedgers() {
   console.log('Getting SCERC721Ledger events...')
-  // const eventsFilter = sCERC721Ledger.filters.CreateDerivativeContract()
-  // const events = await sCERC721Ledger.queryFilter(eventsFilter)
+  const erc721Filter = sCERC721Ledger.filters.CreateDerivativeContract()
+  const erc721Events = await sCERC721Ledger.queryFilter(erc721Filter)
   console.log('Got SCERC721Ledger events!')
+  console.log('Getting SCEEmailLedger events...')
+  const emailFilter = sCEmailLedger.filters.CreateDerivativeContract()
+  const emailEvents = await sCEmailLedger.queryFilter(emailFilter)
+  console.log('Got SCEEmailLedger events!')
 }
 
 function startListeners() {
