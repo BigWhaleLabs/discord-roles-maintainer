@@ -48,7 +48,7 @@ function startListeners() {
     async (email, derivativeContract) => {
       await role.create(env.VITE_WALLET_PUBLIC_ADDRESS, sign, {
         guildId: parseInt(env.VITE_GUILD_ID),
-        name: derivativeContract.tokenName + '-D',
+        name: email + '-D',
         logic: 'AND',
         requirements: [
           {
