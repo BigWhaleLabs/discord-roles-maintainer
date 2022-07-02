@@ -4,7 +4,7 @@ import signer from '@/helpers/signer'
 import wallet from '@/helpers/wallet'
 
 export default async function (name: string, address: string) {
-  console.log(`Creating guild role ${name}...`)
+  console.log(`Creating guild role ${name} (${address})...`)
   if (env.isDev) {
     return
   }

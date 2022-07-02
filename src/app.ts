@@ -24,6 +24,10 @@ void (async () => {
   console.log('App started!')
 })()
 
+function cleanName(name: string) {
+  return name.replace(' (derivative)', '').replace(' email', '')
+}
+
 async function checkLedgers() {
   console.log('Getting existing roles...')
   const fetchedGuild = await guild.get(env.GUILD_ID)
@@ -36,6 +40,7 @@ async function checkLedgers() {
     {} as { [name: string]: boolean }
   )
   console.log(`Got ${roles.length} roles!`)
+  console.log(roles.map((r) => r.name))
   console.log('Getting SCERC721Ledger events...')
   const erc721Filter = sCERC721Ledger.filters.CreateDerivativeContract()
   const erc721Events = await sCERC721Ledger.queryFilter(erc721Filter)
@@ -66,7 +71,7 @@ async function checkLedgers() {
   const derivativeNamesAndTokens = (
     await Promise.all(derivativeTokens.map((t) => t.name()))
   )
-    .map((n) => n.replace(' (derivative)', '').replace(' email', ''))
+    .map(cleanName)
     .map((n, i) => ({ name: getName(n), derivative: derivativeTokens[i] }))
   console.log(`Got derivative tokens names!`)
   const rolesToCreate = derivativeNamesAndTokens.filter(
@@ -86,11 +91,10 @@ function startListeners() {
         derivativeContract,
         defaultProvider
       )
-      const symbol = await contract.symbol()
-      console.log(`Creating role for ${symbol} (${derivativeContract})...`)
-      const name = getName(symbol)
+      const name = cleanName(await contract.name())
+      console.log(`Creating role for ${name} (${derivativeContract})...`)
       await createGuildRole(name, derivativeContract)
-      console.log(`Created role for ${symbol} — ${name}`)
+      console.log(`Created role for ${name}`)
     }
   )
   sCEmailLedger.on(
@@ -101,11 +105,10 @@ function startListeners() {
         derivativeContract,
         defaultProvider
       )
-      const symbol = await contract.symbol()
-      console.log(`Creating role for ${symbol} (${derivativeContract})...`)
-      const name = getName(symbol)
+      const name = cleanName(await contract.name())
+      console.log(`Creating role for ${name} (${derivativeContract})...`)
       await createGuildRole(name, derivativeContract)
-      console.log(`Created role for ${symbol} — ${name}`)
+      console.log(`Created role for ${name}`)
     }
   )
 }
