@@ -73,6 +73,7 @@ async function checkLedgers() {
   )
     .map(cleanName)
     .map((n, i) => ({ name: getName(n), derivative: derivativeTokens[i] }))
+    .filter((n) => !n.name.includes('derivative'))
   console.log(`Got derivative tokens names!`)
   const rolesToCreate = derivativeNamesAndTokens.filter(
     ({ name }) => !roleNamesMap[name]
@@ -92,6 +93,10 @@ function startListeners() {
         defaultProvider
       )
       const name = cleanName(await contract.name())
+      if (name.includes('derivative')) {
+        console.log(`Skipping ${name}`)
+        return
+      }
       console.log(`Creating role for ${name} (${derivativeContract})...`)
       await createGuildRole(name, derivativeContract)
       console.log(`Created role for ${name}`)
@@ -106,6 +111,10 @@ function startListeners() {
         defaultProvider
       )
       const name = cleanName(await contract.name())
+      if (name.includes('derivative')) {
+        console.log(`Skipping ${name}`)
+        return
+      }
       console.log(`Creating role for ${name} (${derivativeContract})...`)
       await createGuildRole(name, derivativeContract)
       console.log(`Created role for ${name}`)

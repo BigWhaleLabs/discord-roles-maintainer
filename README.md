@@ -20,5 +20,6 @@ And you should be good to go! Feel free to fork and submit pull requests.
 | `SC_EMAIL_LEDGER_CONTRACT_ADDRESS`  | Address of the SCEmailLedger contract (defaults to @bwl/constants)  |
 | `SC_ERC721_LEDGER_CONTRACT_ADDRESS` | Address of the SCERC721Ledger contract (defaults to @bwl/constants) |
 | `GUILD_ID`                          | Guild.xyz ID                                                        |
+| `DISCORD_SERVER_ID`                 | Discord server ID                                                   |
 | `VERIFIED_HOLDER_ROLE_ID`           | Role ID of the verified holder role                                 |
 | `WALLET_PRIVATE_KEY`                | Private key to modify Guild.xyz                                     |

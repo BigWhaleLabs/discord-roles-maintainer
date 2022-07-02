@@ -22,6 +22,7 @@ export default cleanEnv(process.env, {
     default: SC_EMAIL_LEDGER_CONTRACT_ADDRESS,
   }),
   GUILD_ID: num(),
+  DISCORD_SERVER_ID: str(),
   WALLET_PRIVATE_KEY: str(),
   VERIFIED_HOLDER_ROLE_ID: num(),
 })
