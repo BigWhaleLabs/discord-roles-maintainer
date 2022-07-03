@@ -88,12 +88,21 @@ function startListeners() {
     sCERC721Ledger.filters.CreateDerivativeContract(),
     async (_, derivativeContract) => {
       console.log(`Creating role for ${derivativeContract}`)
+      const fetchedGuild = await guild.get(env.GUILD_ID)
+      const roles = fetchedGuild.roles
+      const roleNamesMap = roles.reduce(
+        (acc, r) => ({
+          ...acc,
+          [r.name]: true,
+        }),
+        {} as { [name: string]: boolean }
+      )
       const contract = SCERC721Derivative__factory.connect(
         derivativeContract,
         defaultProvider
       )
       const name = getName(cleanName(await contract.name()))
-      if (name.includes('derivative')) {
+      if (name.includes('derivative') || roleNamesMap[name]) {
         console.log(`Skipping ${name}`)
         return
       }
@@ -106,11 +115,24 @@ function startListeners() {
     sCEmailLedger.filters.CreateDerivativeContract(),
     async (_, derivativeContract) => {
       console.log(`Creating role for ${derivativeContract}`)
+      const fetchedGuild = await guild.get(env.GUILD_ID)
+      const roles = fetchedGuild.roles
+      const roleNamesMap = roles.reduce(
+        (acc, r) => ({
+          ...acc,
+          [r.name]: true,
+        }),
+        {} as { [name: string]: boolean }
+      )
       const contract = SCEmailDerivative__factory.connect(
         derivativeContract,
         defaultProvider
       )
       const name = getName(cleanName(await contract.name()))
+      if (roleNamesMap[name]) {
+        console.log(`Skipping ${name}`)
+        return
+      }
       console.log(`Creating role for ${name} (${derivativeContract})...`)
       await createGuildRole(name, derivativeContract)
       console.log(`Created role for ${name}`)
