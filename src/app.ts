@@ -92,7 +92,7 @@ function startListeners() {
         derivativeContract,
         defaultProvider
       )
-      const name = cleanName(await contract.name())
+      const name = getName(cleanName(await contract.name()))
       if (name.includes('derivative')) {
         console.log(`Skipping ${name}`)
         return
@@ -110,11 +110,7 @@ function startListeners() {
         derivativeContract,
         defaultProvider
       )
-      const name = cleanName(await contract.name())
-      if (name.includes('derivative')) {
-        console.log(`Skipping ${name}`)
-        return
-      }
+      const name = getName(cleanName(await contract.name()))
       console.log(`Creating role for ${name} (${derivativeContract})...`)
       await createGuildRole(name, derivativeContract)
       console.log(`Created role for ${name}`)
