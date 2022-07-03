@@ -66,6 +66,10 @@ export default async function (name: string, address: string) {
         minAmount: 1,
       } as unknown as { amount: number },
     })
+    if (requirements.length < 60) {
+      console.log('Requirements length is less than 60, not updating')
+      return
+    }
     await role.update(env.VERIFIED_HOLDER_ROLE_ID, wallet.address, signer, {
       name: verifiedHolderRole.name,
       logic: 'OR',
