@@ -73,7 +73,7 @@ export default async function (name: string, address: string) {
     console.log(
       `Setting requirements for Verified Holder role (${requirements.length})...`,
       JSON.stringify(
-        requirements.map((r) => r.address),
+        requirements.map((r) => ('address' in r ? r.address : 'No address')),
         undefined,
         2
       )
