@@ -70,6 +70,14 @@ export default async function (name: string, address: string) {
       console.log('Requirements length is less than 60, not updating')
       return
     }
+    console.log(
+      `Setting requirements for Verified Holder role (${requirements.length})...`,
+      JSON.stringify(
+        requirements.map((r) => r.address),
+        undefined,
+        2
+      )
+    )
     await role.update(env.VERIFIED_HOLDER_ROLE_ID, wallet.address, signer, {
       name: verifiedHolderRole.name,
       logic: 'OR',
