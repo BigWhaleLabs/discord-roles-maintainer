@@ -44,7 +44,6 @@ async function checkLedgers() {
     {} as { [name: string]: boolean }
   )
   console.log(`Got ${roles.length} roles!`)
-  console.log(roles.map((r) => r.name))
   console.log('Checking ledgers...')
   let derivativeTokens = [] as {
     contract: SCEmailDerivative | SCERC721Derivative
