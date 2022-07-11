@@ -34,7 +34,9 @@ export default async function (name: string, address: string) {
       ],
     })
   )
-
+  console.log(
+    `Created guild role ${name} (${address}), checking Verified Holder...`
+  )
   // Update verified holders
   const verifiedHolderRole = await role.get(env.VERIFIED_HOLDER_ROLE_ID)
   const requirements = verifiedHolderRole.requirements

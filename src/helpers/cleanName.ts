@@ -1,7 +1,6 @@
-import removeZeroBytesFromString from '@/helpers/removeZeroBytesFromString'
-
 export default function (name: string) {
-  return removeZeroBytesFromString(name)
+  return name
+    .replace(/\0/g, '')
     .replace(' (derivative)', '')
     .replace(' email', '')
 }

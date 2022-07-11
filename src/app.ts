@@ -46,36 +46,36 @@ async function checkLedgers() {
     contract: SCEmailDerivative | SCERC721Derivative
     network: Network
   }[]
-  console.log('Getting SCERC721Ledger events...')
-  const erc721Filter = sCERC721LedgerContract.filters.CreateDerivativeContract()
-  const erc721Events = await sCERC721LedgerContract.queryFilter(erc721Filter)
-  derivativeTokens = erc721Events.map((e) => ({
-    contract: SCERC721Derivative__factory.connect(
-      e.args.derivativeContract,
-      defaultProvider
-    ),
-    network: Network.goerli,
-  }))
-  console.log(
-    `Got SCERC721Ledger events! Derivative tokens count: ${derivativeTokens.length}`
-  )
-  console.log('Getting ExternalSCERC721Ledger events...')
-  const externalErc721Filter =
-    externalSCERC721LedgerContract.filters.CreateDerivativeContract()
-  const externalErc721Events = await externalSCERC721LedgerContract.queryFilter(
-    externalErc721Filter
-  )
-  const externalTokens = externalErc721Events.map((e) => ({
-    contract: SCERC721Derivative__factory.connect(
-      e.args.derivativeContract,
-      defaultProvider
-    ),
-    network: Network.mainnet,
-  }))
-  derivativeTokens = [...derivativeTokens, ...externalTokens]
-  console.log(
-    `Got ExternalSCERC721Ledger events! Derivative tokens count: ${derivativeTokens.length}`
-  )
+  // console.log('Getting SCERC721Ledger events...')
+  // const erc721Filter = sCERC721LedgerContract.filters.CreateDerivativeContract()
+  // const erc721Events = await sCERC721LedgerContract.queryFilter(erc721Filter)
+  // derivativeTokens = erc721Events.map((e) => ({
+  //   contract: SCERC721Derivative__factory.connect(
+  //     e.args.derivativeContract,
+  //     defaultProvider
+  //   ),
+  //   network: Network.goerli,
+  // }))
+  // console.log(
+  //   `Got SCERC721Ledger events! Derivative tokens count: ${derivativeTokens.length}`
+  // )
+  // console.log('Getting ExternalSCERC721Ledger events...')
+  // const externalErc721Filter =
+  //   externalSCERC721LedgerContract.filters.CreateDerivativeContract()
+  // const externalErc721Events = await externalSCERC721LedgerContract.queryFilter(
+  //   externalErc721Filter
+  // )
+  // const externalTokens = externalErc721Events.map((e) => ({
+  //   contract: SCERC721Derivative__factory.connect(
+  //     e.args.derivativeContract,
+  //     defaultProvider
+  //   ),
+  //   network: Network.mainnet,
+  // }))
+  // derivativeTokens = [...derivativeTokens, ...externalTokens]
+  // console.log(
+  //   `Got ExternalSCERC721Ledger events! Derivative tokens count: ${derivativeTokens.length}`
+  // )
   console.log('Getting SCEmailLedger events...')
   const emailFilter = sCEmailLedgerContract.filters.CreateDerivativeContract()
   const emailEvents = await sCEmailLedgerContract.queryFilter(emailFilter)
@@ -111,6 +111,7 @@ async function checkLedgers() {
   const rolesToCreate = derivativeNamesAndTokens.filter(
     ({ name }) => !roleNamesMap[name]
   )
+
   for (const {
     name,
     derivative: { contract },
