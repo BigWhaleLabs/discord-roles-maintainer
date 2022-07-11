@@ -27,9 +27,6 @@ export default async function (name: string, address: string) {
           address,
           data: {
             minAmount: 1,
-          } as unknown as {
-            minAmount: number
-            maxAmount: number
           },
         },
       ],
@@ -63,9 +60,6 @@ export default async function (name: string, address: string) {
       address,
       data: {
         minAmount: 1,
-      } as unknown as {
-        minAmount: number
-        maxAmount: number
       },
     })
     if (requirements.length < 60) {

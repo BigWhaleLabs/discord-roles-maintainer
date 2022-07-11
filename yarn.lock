@@ -464,14 +464,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@guildxyz/sdk@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@guildxyz/sdk@npm:1.1.0"
+"@guildxyz/sdk@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@guildxyz/sdk@npm:1.1.1"
   dependencies:
     axios: ^0.26.1
     ethers: ^5.5.4
     fast-json-stable-stringify: ^2.1.0
-  checksum: 23e9e69f07f791e0ca01581a07f67b240e43d674763c9580c02d814045c8ed3e6219d4a41f68164000c48a990876e6e85b35302421730f055da141df376c88fd
+  checksum: 82cf1fb880530422b5c01490ce632afa03f58325c62cf3f6882cbaccf5c73029d1568b5b6b38da0fde7dcbed086cf6cdb288f1db19af7728b8237223c7f373e5
   languageName: node
   linkType: hard
 
@@ -981,7 +981,7 @@ __metadata:
   dependencies:
     "@big-whale-labs/constants": ^0.1.7
     "@big-whale-labs/seal-cred-ledger-contract": ^0.2.3
-    "@guildxyz/sdk": ^1.1.0
+    "@guildxyz/sdk": ^1.1.1
     "@types/node": ^18.0.3
     "@typescript-eslint/eslint-plugin": ^5.30.6
     "@typescript-eslint/parser": ^5.30.6
