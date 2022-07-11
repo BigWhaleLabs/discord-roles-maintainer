@@ -67,12 +67,7 @@ export default async function (name: string, address: string) {
       return
     }
     console.log(
-      `Setting requirements for Verified Holder role (${requirements.length})...`,
-      JSON.stringify(
-        requirements.map((r) => ('address' in r ? r.address : 'No address')),
-        undefined,
-        2
-      )
+      `Setting requirements for Verified Holder role (${requirements.length})...`
     )
     await expect504(
       role.update(env.VERIFIED_HOLDER_ROLE_ID, wallet.address, signer, {
