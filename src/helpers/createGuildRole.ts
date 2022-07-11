@@ -1,5 +1,6 @@
 import { Requirement, role } from '@guildxyz/sdk'
 import env from '@/helpers/env'
+import expect504 from '@/helpers/expect504'
 import signer from '@/helpers/signer'
 import wallet from '@/helpers/wallet'
 
@@ -13,8 +14,8 @@ export default async function (name: string, address: string) {
     return
   }
   // Create guild role
-  try {
-    await role.create(wallet.address, signer, {
+  await expect504(
+    role.create(wallet.address, signer, {
       imageUrl: `/guildLogos/${getRandomInt(285)}.svg`,
       platform: 'DISCORD',
       platformId: env.DISCORD_SERVER_ID,
@@ -32,13 +33,8 @@ export default async function (name: string, address: string) {
         },
       ],
     })
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('504')) {
-      console.log('Request failed with 504, but it probably succeeded')
-    } else {
-      throw error
-    }
-  }
+  )
+
   // Update verified holders
   const verifiedHolderRole = await role.get(env.VERIFIED_HOLDER_ROLE_ID)
   const requirements = verifiedHolderRole.requirements
@@ -78,10 +74,12 @@ export default async function (name: string, address: string) {
         2
       )
     )
-    await role.update(env.VERIFIED_HOLDER_ROLE_ID, wallet.address, signer, {
-      name: verifiedHolderRole.name,
-      logic: 'OR',
-      requirements,
-    })
+    await expect504(
+      role.update(env.VERIFIED_HOLDER_ROLE_ID, wallet.address, signer, {
+        name: verifiedHolderRole.name,
+        logic: 'OR',
+        requirements,
+      })
+    )
   }
 }
