@@ -15,15 +15,15 @@
     "lint": "yarn pretty && eslint --max-warnings 0 --ext ts,tsx,json src"
   },
   "dependencies": {
-    "@big-whale-labs/constants": "^0.1.0",
-    "@big-whale-labs/seal-cred-ledger-contract": "^0.0.7",
+    "@big-whale-labs/constants": "^0.1.7",
+    "@big-whale-labs/seal-cred-ledger-contract": "^0.2.3",
     "@guildxyz/sdk": "^0.1.2",
     "dotenv": "^16.0.1",
     "envalid": "^7.3.1",
     "ethers": "^5.6.9"
   },
   "devDependencies": {
-    "@types/node": "^18.0.1",
+    "@types/node": "^18.0.3",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
     "eslint": "^8.19.0",

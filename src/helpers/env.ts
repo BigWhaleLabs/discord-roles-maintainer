@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv'
 import {
   ETH_NETWORK,
   ETH_RPC,
+  EXTERNAL_SC_ERC721_LEDGER_CONTRACT_ADDRESS,
   SC_EMAIL_LEDGER_CONTRACT_ADDRESS,
   SC_ERC721_LEDGER_CONTRACT_ADDRESS,
 } from '@big-whale-labs/constants'
@@ -15,6 +16,9 @@ dotenv.config({ path: resolve(cwd(), '.env') })
 export default cleanEnv(process.env, {
   ETH_NETWORK: str({ default: ETH_NETWORK }),
   ETH_RPC: str({ default: ETH_RPC }),
+  EXTERNAL_SC_ERC721_LEDGER_CONTRACT_ADDRESS: str({
+    default: EXTERNAL_SC_ERC721_LEDGER_CONTRACT_ADDRESS,
+  }),
   SC_ERC721_LEDGER_CONTRACT_ADDRESS: str({
     default: SC_ERC721_LEDGER_CONTRACT_ADDRESS,
   }),
