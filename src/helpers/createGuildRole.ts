@@ -17,8 +17,6 @@ export default async function (name: string, address: string) {
   await expect504(
     role.create(wallet.address, signer, {
       imageUrl: `/guildLogos/${getRandomInt(285)}.svg`,
-      platform: 'DISCORD',
-      platformId: env.DISCORD_SERVER_ID,
       guildId: env.GUILD_ID,
       name,
       logic: 'AND',
@@ -29,7 +27,10 @@ export default async function (name: string, address: string) {
           address,
           data: {
             minAmount: 1,
-          } as unknown as { amount: number },
+          } as unknown as {
+            minAmount: number
+            maxAmount: number
+          },
         },
       ],
     })
@@ -50,7 +51,7 @@ export default async function (name: string, address: string) {
         address: r.address,
         data: {
           minAmount: 1,
-        } as unknown as { amount: number },
+        },
       }
     })
     .filter((r) => !!r) as Requirement[]
@@ -62,7 +63,10 @@ export default async function (name: string, address: string) {
       address,
       data: {
         minAmount: 1,
-      } as unknown as { amount: number },
+      } as unknown as {
+        minAmount: number
+        maxAmount: number
+      },
     })
     if (requirements.length < 60) {
       console.log('Requirements length is less than 60, not updating')
