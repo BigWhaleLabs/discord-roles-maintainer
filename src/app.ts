@@ -14,6 +14,7 @@ import {
 } from '@/helpers/ledgerContracts'
 import { guild } from '@guildxyz/sdk'
 import Network from '@/models/Network'
+import cleanName from '@/helpers/cleanName'
 import createGuildRole from '@/helpers/createGuildRole'
 import defaultProvider from '@/helpers/defaultProvider'
 import env from '@/helpers/env'
@@ -27,10 +28,6 @@ void (async () => {
   startListeners()
   console.log('App started!')
 })()
-
-function cleanName(name: string) {
-  return name.replace(' (derivative)', '').replace(' email', '')
-}
 
 async function checkLedgers() {
   console.log('Getting existing roles...')
