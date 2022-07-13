@@ -23,7 +23,6 @@ void (async () => {
 })()
 
 async function checkLedgers() {
-  console.log('Checking ledgers...')
   let derivativeTokens = [] as string[]
   console.log('Getting SCERC721Ledger events...')
   const erc721Filter = sCERC721LedgerContract.filters.CreateDerivativeContract()
