@@ -6,12 +6,7 @@ import {
   sCERC721LedgerContract,
   sCEmailLedgerContract,
 } from '@/helpers/ledgerContracts'
-import { role } from '@guildxyz/sdk'
 import addToVerifiedHolder from '@/helpers/addToVerifiedHolder'
-import env from '@/helpers/env'
-import expect504 from '@/helpers/expect504'
-import signer from '@/helpers/signer'
-import wallet from '@/helpers/wallet'
 
 void (async () => {
   console.log('Checking ledgers...')
@@ -19,6 +14,8 @@ void (async () => {
   console.log('Checked ledgers!')
   console.log('Starting listeners...')
   startListeners()
+  console.log('Starting queue checker...')
+  startCheckingQueue()
   console.log('App started!')
 })()
 
@@ -52,73 +49,57 @@ async function checkLedgers() {
   console.log(
     `Got SCEmailLedger events! Derivative tokens count: ${derivativeTokens.length}`
   )
-  console.log('Updating the verified holders...')
-  const verifiedHolderRole = await role.get(env.VERIFIED_HOLDER_ROLE_ID)
-  console.log(`Got ${verifiedHolderRole.requirements.length} requirements`)
-  const existingAddressesMap = verifiedHolderRole.requirements.reduce(
-    (acc, r) => {
-      if ('address' in r) {
-        acc[r.address] = true
-      }
-      return acc
-    },
-    {} as { [address: string]: boolean }
-  )
-  const newAddresses = derivativeTokens.filter(
-    (t) => !(t in existingAddressesMap)
-  )
-  console.log(`New addresses count: ${newAddresses.length}`)
-  if (newAddresses.length > 0) {
-    console.log('Adding new addresses to verified holders...')
-    const requirements = verifiedHolderRole.requirements.concat(
-      newAddresses.map((a) => ({
-        type: 'ERC721',
-        chain: 'GOERLI',
-        address: a,
-        data: {
-          minAmount: 1,
-        },
-      }))
-    )
-    console.log(
-      `Setting requirements for Verified Holder role (${requirements.length})...`
-    )
-    if (env.isDev) {
-      console.log(`Not adding requirement in development`)
-    } else {
-      await expect504(
-        role.update(env.VERIFIED_HOLDER_ROLE_ID, wallet.address, signer, {
-          name: verifiedHolderRole.name,
-          logic: 'OR',
-          requirements,
-        })
-      )
+  await addToVerifiedHolder(...derivativeTokens)
+}
+
+let queue = [] as string[]
+let isUpdating = false
+function startCheckingQueue() {
+  setInterval(async () => {
+    if (isUpdating) {
+      return
     }
-  }
+    isUpdating = true
+    const tempQueue = [...queue]
+    queue = []
+    try {
+      if (tempQueue.length) {
+        await addToVerifiedHolder(...tempQueue)
+      }
+    } catch (error) {
+      console.error(
+        'Error updating the role',
+        error instanceof Error ? error.message : error
+      )
+      queue = [...queue, ...tempQueue]
+    } finally {
+      isUpdating = false
+    }
+  }, 1 * 1000)
 }
 
 function startListeners() {
   externalSCERC721LedgerContract.on(
     externalSCERC721LedgerContract.filters.CreateDerivativeContract(),
-    async (_, derivativeContract) => {
+    (_, derivativeContract) => {
       console.log(
         `New derivative token (ExternalERC721): ${derivativeContract}`
       )
-      await addToVerifiedHolder(derivativeContract)
+      queue.push(derivativeContract)
     }
   )
   sCERC721LedgerContract.on(
     sCERC721LedgerContract.filters.CreateDerivativeContract(),
-    async (_, derivativeContract) => {
-      console.log(`New derivative token: ${derivativeContract} (ERC721)`)
-      await addToVerifiedHolder(derivativeContract)
+    (_, derivativeContract) => {
+      console.log(`New derivative token (ERC721): ${derivativeContract}`)
+      queue.push(derivativeContract)
     }
   )
   sCEmailLedgerContract.on(
     sCEmailLedgerContract.filters.CreateDerivativeContract(),
-    async (_, derivativeContract) => {
+    (_, derivativeContract) => {
       console.log(`New derivative token (Email): ${derivativeContract}`)
-      await addToVerifiedHolder(derivativeContract)
+      queue.push(derivativeContract)
     }
   )
 }
