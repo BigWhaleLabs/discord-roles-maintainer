@@ -1,4 +1,6 @@
+import { ERC721__factory } from '@big-whale-labs/seal-cred-ledger-contract'
 import { role } from '@guildxyz/sdk'
+import defaultProvider from '@/helpers/defaultProvider'
 import env from '@/helpers/env'
 import expect504 from '@/helpers/expect504'
 import signer from '@/helpers/signer'
@@ -20,10 +22,28 @@ export default async function (...addresses: string[]) {
   )
   const newAddresses = addresses.filter((t) => !(t in existingAddressesMap))
   console.log(`New addresses count: ${newAddresses.length}`)
-  if (newAddresses.length > 0) {
+  // Filter for names and symbols to be UTF-8
+  const newAddressesFiltered = [] as string[]
+  for (const address of newAddresses) {
+    try {
+      const contract = ERC721__factory.connect(address, defaultProvider)
+      const name = await contract.name()
+      const symbol = await contract.symbol()
+      console.log(name, symbol, !/\0/g.test(name) && !/\0/g.test(symbol))
+      if (!/\0/g.test(name) && !/\0/g.test(symbol)) {
+        newAddressesFiltered.push(address)
+      }
+    } catch (error) {
+      console.log(
+        `Failed to check ${address} for UTF-8 compatibility`,
+        error instanceof Error ? error.message : error
+      )
+    }
+  }
+  if (newAddressesFiltered.length > 0) {
     console.log('Adding new addresses to verified holders...')
     const requirements = verifiedHolderRole.requirements.concat(
-      newAddresses.map((a) => ({
+      newAddressesFiltered.map((a) => ({
         type: 'ERC721',
         chain: 'GOERLI',
         address: a,
