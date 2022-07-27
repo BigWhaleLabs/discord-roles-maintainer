@@ -29,7 +29,6 @@ export default async function (...addresses: string[]) {
       const contract = ERC721__factory.connect(address, defaultProvider)
       const name = await contract.name()
       const symbol = await contract.symbol()
-      console.log(name, symbol, !/\0/g.test(name) && !/\0/g.test(symbol))
       if (!/\0/g.test(name) && !/\0/g.test(symbol)) {
         newAddressesFiltered.push(address)
       }
