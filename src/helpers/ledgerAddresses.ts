@@ -1,0 +1,7 @@
+import env from '@/helpers/env'
+
+export default [
+  env.SC_EMAIL_LEDGER_CONTRACT_ADDRESS,
+  env.SC_ERC721_LEDGER_CONTRACT_ADDRESS,
+  env.SC_EXTERNAL_ERC721_LEDGER_CONTRACT_ADDRESS,
+]
