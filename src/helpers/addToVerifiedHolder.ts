@@ -54,7 +54,7 @@ export default async function (...addresses: string[]) {
     console.log(
       `Setting requirements for Verified Holder role (${requirements.length})...`
     )
-    if (requirements.length < 1300) {
+    if (requirements.length < 2300) {
       console.log(`Not adding requirement in development, too few requirements`)
       return
     }

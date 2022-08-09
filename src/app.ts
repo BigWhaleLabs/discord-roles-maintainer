@@ -18,11 +18,11 @@ void (async () => {
 async function checkLedgers() {
   let derivativeTokens = [] as string[]
   for (const contract of ledgerContracts) {
-    console.log(`Getting ${contract} events...`)
+    console.log(`Getting ${contract.address} events...`)
     const filter = contract.filters.CreateDerivative()
     const events = await contract.queryFilter(filter)
     console.log(
-      `Got ${contract} events! Derivative tokens count: ${derivativeTokens.length}`
+      `Got ${contract.address} events! Derivative tokens count: ${derivativeTokens.length}`
     )
     derivativeTokens = [
       ...derivativeTokens,
